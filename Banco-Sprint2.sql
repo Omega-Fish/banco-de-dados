@@ -1,14 +1,15 @@
 create database Sprint2;
 use Sprint2;
 
-create table Empresa(
-	idEmpresa int primary key auto_increment,
-	nome varchar(40),
-    cnpj char(14) unique,
-    uf char(2),
-    telefone char(15),
-    email varchar(50),
-    senha varchar(30) unique);
+create table Empresa
+( idEmpresa int primary key auto_increment,
+nome varchar(40),
+cnpj char(14) unique,
+logradouro varchar(60),
+uf char(2),
+telefone char(15),
+email varchar(50),
+senha varchar(30) unique);
 
 create table Usuario
  ( idUsuario int primary key auto_increment,
