@@ -173,5 +173,5 @@ join Usuario on idEmpresa = fkEmpresa;
 -- Selecionar os sensores de temperatura e umidade das câmaras de fresco para uma empresa específica (por exemplo, Aqua Transportes Ltda):
 select Empresa.nome as 'Empresa',CamaraFresco.SensorTemp, CamaraFresco.SensorUmid, CamaraFresco.HoraColeta 
 from CamaraFresco 
-inner join Empresa on fkEmpresa = idEmpresa 
+join Empresa on fkEmpresa = idEmpresa 
 where nome = 'Aqua Transportes Ltda';
