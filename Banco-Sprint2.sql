@@ -4,152 +4,199 @@ use Sprint2;
 create table Empresa
 ( idEmpresa int primary key auto_increment,
 nome varchar(40),
-cnpj char(18) unique,
-logradouro varchar(60),
+cnpj char(14) unique,
+cep char(9),
+numLogradouro char(4),
+complemento varchar(20),
 uf char(2),
 telefone char(15),
-email varchar(50),
-senha varchar(30) unique);
+email varchar(50)
+);
 
 create table Usuario
  ( idUsuario int primary key auto_increment,
  nome varchar(20),
  email varchar(50) unique,
  telefone char(15), 
- senha varchar(30) unique,
- cargo varchar(30), 
+ senha varchar(30) unique, 
  fkEmpresa int,
 CONSTRAINT fkEmpresaUsuario FOREIGN KEY (fkEmpresa)
-REFERENCES empresa(idEmpresa));  
+REFERENCES empresa(idEmpresa)
+);
 
-create table CamaraFresco 
-( idCamaraFresco int primary key auto_increment,
+create table Camara 
+( idCamara int primary key auto_increment,
 fkEmpresa int,
-CONSTRAINT fkEmpresaCamaraFresco FOREIGN KEY (fkEmpresa)
+CONSTRAINT fkEmpresaCamara FOREIGN KEY (fkEmpresa)
 REFERENCES empresa(idEmpresa),  
-SensorTemp float,
-SensorUmid float,
-HoraColeta datetime);
+qtdPescados int,
+Especie varchar(30),
+tipoCamara varchar(15),
+constraint chkTipoCamara check (tipoCamara in ('fresco','congelado'))
+);
 
-create table CamaraCongelado 
-( idCamaraCongelado int primary key auto_increment,
-fkEmpresa int,
-CONSTRAINT fkEmpresaCamaraCongelado FOREIGN KEY (fkEmpresa)
-REFERENCES empresa(idEmpresa),  
-SensorTemp float,
-SensorUmid float,
-HoraColeta datetime);
+create table Sensor
+( idSensor int primary key auto_increment,
+fkCamara int,
+CONSTRAINT fkCamaraSensor FOREIGN KEY (fkCamara)
+REFERENCES camara(idCamara),
+Modelo varchar(25),
+UltimaManutencao DATE
+);
+
+create table Dados
+( idDados int primary key auto_increment,
+fkSensor int,
+CONSTRAINT fkSensorDados FOREIGN KEY (fkSensor)
+REFERENCES sensor(idSensor),
+SensorTemp FLOAT,
+SensorUmid FLOAT,
+HoraColeta DATETIME
+);
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para as empresas fictícias
-insert into Empresa (nome, cnpj, logradouro, uf, telefone, email, senha) 
+insert into Empresa (nome, cnpj, cep, numLogradouro, complemento, uf, telefone, email) 
 values 
-('Mar Pesca Ltda', '12.345.678/0001-01', 'Rua dos Pescadores, 123', 'RJ', '(21) 98765-4321', 'contato@marpesca.com', 'senha1234'),
-('Aqua Transportes Ltda', '23.456.789/0001-02', 'Av. das Águas, 456', 'SP', '(11) 12345-6789', 'contato@aqua.com', 'senha5678'),
-('Pescados do Norte S/A', '34.567.890/0001-03', 'Estrada dos Peixes, 789', 'AM', '(92) 98765-4321', 'contato@pescadosdonorte.com', 'senhaabcd'),
-('Peixaria Atlântico Ltda', '45.678.901/0001-04', 'Avenida do Mar, 321', 'BA', '(71) 12345-6789', 'contato@peixariaatlantico.com', 'senha9876');
+('Mar Pesca Ltda', '12345678000101', '00000-000', '123', 'Bloco 42', 'RJ', '(21) 98765-4321', 'contato@marpesca.com'),
+('Aqua Transportes Ltda', '23456789000102', '00000-000', '456', 'Galpão 61', 'SP', '(11) 12345-6789', 'contato@aqua.com'),
+('Pescados do Norte S/A', '34567890000103', '00000-000', '789', 'Armazem 12', 'AM', '(92) 98765-4321', 'contato@pescadosdonorte.com'),
+('Peixaria Atlântico Ltda', '45678901000104', '00000-000', '321', 'Bloco 39', 'BA', '(71) 12345-6789', 'contato@peixariaatlantico.com');
 -- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Insert de Usuários nas empresas
 -- Empresa: Mar Pesca Ltda
-insert into Usuario (nome, email, telefone, senha, cargo, fkEmpresa) 
+insert into Usuario (nome, email, telefone, senha, fkEmpresa) 
 values 
-('Antônio Silva', 'antonio.silva@marpesca.com', '(21) 99876-5432', 'antonio123', 'Proprietário', 1),
-('Luana Oliveira', 'luana.oliveira@marpesca.com', '(21) 98765-4321', 'luana456', 'Operador', 1),
-('Rafael Santos', 'rafael.santos@marpesca.com', '(21) 98765-6789', 'rafael789', 'Motorista', 1);
+('Antônio Silva', 'antonio.silva@marpesca.com', '(21) 99876-5432', 'antonio123', 1),
+('Luana Oliveira', 'luana.oliveira@marpesca.com', '(21) 98765-4321', 'luana456', 1),
+('Rafael Santos', 'rafael.santos@marpesca.com', '(21) 98765-6789', 'rafael789', 1);
 
 -- Empresa: Aqua Transportes Ltda
-insert into Usuario (nome, email, telefone, senha, cargo, fkEmpresa) 
+insert into Usuario (nome, email, telefone, senha, fkEmpresa) 
 values 
-('Pedro Lima', 'pedro.lima@aqua.com', '(11) 99876-5432', 'pedro123', 'Proprietário', 2),
-('Ana Souza', 'ana.souza@aqua.com', '(11) 98765-4321', 'ana456', 'Operador', 2),
-('Márcio Oliveira', 'marcio.oliveira@aqua.com', '(11) 98765-6789', 'marcio789', 'Motorista', 2);
+('Pedro Lima', 'pedro.lima@aqua.com', '(11) 99876-5432', 'pedro123', 2),
+('Ana Souza', 'ana.souza@aqua.com', '(11) 98765-4321', 'ana456', 2),
+('Márcio Oliveira', 'marcio.oliveira@aqua.com', '(11) 98765-6789', 'marcio789', 2);
 
 -- Empresa: Pescados do Norte S/A
-insert into Usuario (nome, email, telefone, senha, cargo, fkEmpresa) 
+insert into Usuario (nome, email, telefone, senha, fkEmpresa) 
 values 
-('Carla Santos', 'carla.santos@pescadosdonorte.com', '(92) 99876-5432', 'carla123', 'Proprietário', 3),
-('Lucas Pereira', 'lucas.pereira@pescadosdonorte.com', '(92) 98765-4321', 'lucas456', 'Operador', 3),
-('Fernanda Lima', 'fernanda.lima@pescadosdonorte.com', '(92) 98765-6789', 'fernanda789', 'Motorista', 3);
+('Carla Santos', 'carla.santos@pescadosdonorte.com', '(92) 99876-5432', 'carla123', 3),
+('Lucas Pereira', 'lucas.pereira@pescadosdonorte.com', '(92) 98765-4321', 'lucas456', 3),
+('Fernanda Lima', 'fernanda.lima@pescadosdonorte.com', '(92) 98765-6789', 'fernanda789', 3);
 
 -- Empresa: Peixaria Atlântico Ltda
-insert into Usuario (nome, email, telefone, senha, cargo, fkEmpresa) 
+insert into Usuario (nome, email, telefone, senha, fkEmpresa) 
 values 
-('Gustavo Silva', 'gustavo.silva@peixariaatlantico.com', '(71) 99876-5432', 'gustavo123', 'Proprietário', 4),
-('Juliana Costa', 'juliana.costa@peixariaatlantico.com', '(71) 98765-4321', 'juliana456', 'Operador', 4),
-('Diego Oliveira', 'diego.oliveira@peixariaatlantico.com', '(71) 98765-6789', 'diego789', 'Motorista', 4);
+('Gustavo Silva', 'gustavo.silva@peixariaatlantico.com', '(71) 99876-5432', 'gustavo123', 4),
+('Juliana Costa', 'juliana.costa@peixariaatlantico.com', '(71) 98765-4321', 'juliana456', 4),
+('Diego Oliveira', 'diego.oliveira@peixariaatlantico.com', '(71) 98765-6789', 'diego789', 4);
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Inserts para a tabela CamaraFresco
+-- Inserts para a tabela Camara
 -- Empresa: Mar Pesca Ltda
-insert into CamaraFresco (fkEmpresa, SensorTemp, SensorUmid, HoraColeta) 
+insert into Camara (fkEmpresa, qtdPescados, Especie, tipoCamara) 
 values 
-(1, 10.5, 65, '2024-04-01 08:00:00'),
+(1, 800, 'Tilápia', 'fresco'),
+(1, 600, 'Salmão', 'congelado');
+
+-- Empresa: Aqua Transportes Ltda
+insert into Camara (fkEmpresa, qtdPescados, Especie, tipoCamara) 
+values 
+(2, 700, 'Tambaqui', 'fresco'),
+(2, 500, 'Robalo', 'congelado');
+
+-- Empresa: Pescados do Norte S/A
+insert into Camara (fkEmpresa, qtdPescados, Especie, tipoCamara) 
+values 
+(3, 900, 'Pintado', 'fresco'),
+(3, 400, 'Linguado', 'congelado');
+
+-- Empresa: Peixaria Atlântico Ltda
+insert into Camara (fkEmpresa, qtdPescados, Especie, tipoCamara) 
+values 
+(4, 1000, 'Dourado', 'fresco'),
+(4, 300, 'Pescada', 'congelado');
+-- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Inserts para a tabela Sensor
+-- Empresa: Mar Pesca Ltda
+insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
+values 
+(1, 'DHT11 Arduino Uno', '2024-03-20'),
+(2, 'DHT11 Arduino Uno', '2024-03-20');
+
+-- Empresa: Aqua Transportes Ltda
+insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
+values 
+(3, 'DHT11 Arduino Uno', '2024-02-15'),
+(4, 'DHT11 Arduino Uno', '2024-02-15');
+
+-- Empresa: Pescados do Norte S/A
+insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
+values 
+(5, 'DHT11 Arduino Uno', '2024-01-10'),
+(6, 'DHT11 Arduino Uno', '2024-01-10');
+
+-- Empresa: Peixaria Atlântico Ltda
+insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
+values 
+(7, 'DHT11 Arduino Uno', '2024-04-05'),
+(8, 'DHT11 Arduino Uno', '2024-04-05');
+-- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Inserts para a tabela Dados
+-- Empresa: Mar Pesca Ltda
+insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
+values 
+(1, 10.5, 65, '2024-04-01 08:00:00'), -- Fresco
 (1, 11.2, 62, '2024-04-01 08:30:00'),
 (1, 11.8, 60, '2024-04-01 09:00:00'),
 (1, 10.3, 64, '2024-04-01 09:30:00'),
-(1, 10.1, 63, '2024-04-01 10:00:00');
+(1, 10.1, 63, '2024-04-01 10:00:00'),
+(2, -18.5, 45, '2024-04-01 08:00:00'), -- Congelado
+(2, -18.2, 46, '2024-04-01 09:00:00'),
+(2, -17.8, 47, '2024-04-01 10:00:00'),
+(2, -17.3, 48, '2024-04-01 11:00:00'),
+(2, -17.0, 49, '2024-04-01 12:00:00');
 
 -- Empresa: Aqua Transportes Ltda
-insert into CamaraFresco (fkEmpresa, SensorTemp, SensorUmid, HoraColeta) 
+insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
 values 
-(2, 9.8, 68, '2024-04-01 08:00:00'),
-(2, 10.2, 66, '2024-04-01 08:30:00'),
-(2, 10.5, 64, '2024-04-01 09:00:00'),
-(2, 9.7, 67, '2024-04-01 09:30:00'),
-(2, 9.5, 65, '2024-04-01 10:00:00');
+(3, 9.8, 68, '2024-04-01 08:00:00'), -- Fresco
+(3, 10.2, 66, '2024-04-01 08:30:00'),
+(3, 10.5, 64, '2024-04-01 09:00:00'),
+(3, 9.7, 67, '2024-04-01 09:30:00'),
+(3, 9.5, 65, '2024-04-01 10:00:00'),
+(4, -20.0, 42, '2024-04-01 08:00:00'), -- Congelado
+(4, -20.3, 43, '2024-04-01 09:00:00'),
+(4, -20.5, 44, '2024-04-01 10:00:00'),
+(4, -20.8, 45, '2024-04-01 11:00:00'),
+(4, -21.0, 46, '2024-04-01 12:00:00');
 
 -- Empresa: Pescados do Norte S/A
-insert into CamaraFresco (fkEmpresa, SensorTemp, SensorUmid, HoraColeta) 
+insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
 values 
-(3, 11.1, 62, '2024-04-01 08:00:00'),
-(3, 11.5, 60, '2024-04-01 08:30:00'),
-(3, 11.9, 58, '2024-04-01 09:00:00'),
-(3, 11.3, 61, '2024-04-01 09:30:00'),
-(3, 11.0, 63, '2024-04-01 10:00:00');
+(5, 11.1, 62, '2024-04-01 08:00:00'), -- Fresco
+(5, 11.5, 60, '2024-04-01 08:30:00'),
+(5, 11.9, 58, '2024-04-01 09:00:00'),
+(5, 11.3, 61, '2024-04-01 09:30:00'),
+(5, 11.0, 63, '2024-04-01 10:00:00'),
+(6, -19.0, 44, '2024-04-01 08:00:00'), -- Congelado
+(6, -19.2, 45, '2024-04-01 09:00:00'),
+(6, -19.5, 46, '2024-04-01 10:00:00'),
+(6, -19.8, 47, '2024-04-01 11:00:00'),
+(6, -20.0, 48, '2024-04-01 12:00:00');
 
 -- Empresa: Peixaria Atlântico Ltda
-insert into CamaraFresco (fkEmpresa, SensorTemp, SensorUmid, HoraColeta) 
+insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
 values 
-(4, 10.2, 67, '2024-04-01 08:00:00'),
-(4, 10.6, 65, '2024-04-01 08:30:00'),
-(4, 11.0, 63, '2024-04-01 09:00:00'),
-(4, 10.4, 66, '2024-04-01 09:30:00'),
-(4, 10.1, 68, '2024-04-01 10:00:00');
--- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Inserts para a tabela CamaraCongelado
--- Empresa: Mar Pesca Ltda
-insert into CamaraCongelado (fkEmpresa, SensorTemp, SensorUmid, HoraColeta) 
-values 
-(1, -18.5, 45, '2024-04-01 08:00:00'),
-(1, -18.2, 46, '2024-04-01 09:00:00'),
-(1, -17.8, 47, '2024-04-01 10:00:00'),
-(1, -17.3, 48, '2024-04-01 11:00:00'),
-(1, -17.0, 49, '2024-04-01 12:00:00');
-
--- Empresa: Aqua Transportes Ltda
-insert into CamaraCongelado (fkEmpresa, SensorTemp, SensorUmid, HoraColeta) 
-values 
-(2, -20.0, 42, '2024-04-01 08:00:00'),
-(2, -20.3, 43, '2024-04-01 09:00:00'),
-(2, -20.5, 44, '2024-04-01 10:00:00'),
-(2, -20.8, 45, '2024-04-01 11:00:00'),
-(2, -21.0, 46, '2024-04-01 12:00:00');
-
--- Empresa: Pescados do Norte S/A
-insert into CamaraCongelado (fkEmpresa, SensorTemp, SensorUmid, HoraColeta) 
-values 
-(3, -19.0, 44, '2024-04-01 08:00:00'),
-(3, -19.2, 45, '2024-04-01 09:00:00'),
-(3, -19.5, 46, '2024-04-01 10:00:00'),
-(3, -19.8, 47, '2024-04-01 11:00:00'),
-(3, -20.0, 48, '2024-04-01 12:00:00');
-
--- Empresa: Peixaria Atlântico Ltda
-insert into CamaraCongelado (fkEmpresa, SensorTemp, SensorUmid, HoraColeta) 
-values 
-(4, -17.5, 47, '2024-04-01 08:00:00'),
-(4, -17.2, 48, '2024-04-01 09:00:00'),
-(4, -16.8, 49, '2024-04-01 10:00:00'),
-(4, -16.3, 50, '2024-04-01 11:00:00'),
-(4, -16.0, 51, '2024-04-01 12:00:00');
+(7, 10.2, 67, '2024-04-01 08:00:00'), -- Fresco
+(7, 10.6, 65, '2024-04-01 08:30:00'),
+(7, 11.0, 63, '2024-04-01 09:00:00'),
+(7, 10.4, 66, '2024-04-01 09:30:00'),
+(7, 10.1, 68, '2024-04-01 10:00:00'),
+(8, -17.5, 47, '2024-04-01 08:00:00'), -- Congelado
+(8, -17.2, 48, '2024-04-01 09:00:00'),
+(8, -16.8, 49, '2024-04-01 10:00:00'),
+(8, -16.3, 50, '2024-04-01 11:00:00'),
+(8, -16.0, 51, '2024-04-01 12:00:00');
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Comandos:
@@ -159,19 +206,16 @@ select * from Empresa;
 -- Exibir tudo Usuário:
 select * from Usuario;
 
--- Exibir tudo Câmara de congelados:
-select * from CamaraCongelado;
+-- Exibir tudo Câmara:
+select * from Camara;
 
--- Exibir tudo Câmara de frescos:
-select * from CamaraFresco;
+-- Exibir tudo Sensor:
+select * from Sensor;
+
+-- Exibir tudo Dados:
+select * from Dados;
 
 -- Selecionar todas as empresas e seus respectivos usuários:
-select Empresa.nome as 'Nome da Empresa', Usuario.nome as 'Nome do Usuário', Usuario.email, Usuario.telefone, Usuario.cargo 
+select Empresa.nome as 'Nome da Empresa', Usuario.nome as 'Nome do Usuário', Usuario.email, Usuario.telefone
 from Empresa 
 join Usuario on idEmpresa = fkEmpresa;
-
--- Selecionar os sensores de temperatura e umidade das câmaras de fresco para uma empresa específica (por exemplo, Aqua Transportes Ltda):
-select Empresa.nome as 'Empresa',CamaraFresco.SensorTemp, CamaraFresco.SensorUmid, CamaraFresco.HoraColeta 
-from CamaraFresco 
-join Empresa on fkEmpresa = idEmpresa 
-where nome = 'Aqua Transportes Ltda';
