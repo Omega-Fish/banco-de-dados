@@ -10,7 +10,8 @@ numLogradouro char(4),
 complemento varchar(20),
 uf char(2),
 telefone char(15),
-email varchar(50)
+email varchar(50),
+token varchar(32) unique
 );
 
 create table Usuario
@@ -55,14 +56,14 @@ HoraColeta DATETIME
 );
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para as empresas fictícias
-insert into Empresa (nome, cnpj, cep, numLogradouro, complemento, uf, telefone, email) 
+insert into Empresa (nome, cnpj, cep, numLogradouro, complemento, uf, telefone, email, token) 
 values 
-('Mar Pesca Ltda', '12345678000101', '00000-000', '123', 'Bloco 42', 'RJ', '(21) 98765-4321', 'contato@marpesca.com'),
-('Aqua Transportes Ltda', '23456789000102', '00000-000', '456', 'Galpão 61', 'SP', '(11) 12345-6789', 'contato@aqua.com'),
-('Pescados do Norte S/A', '34567890000103', '00000-000', '789', 'Armazem 12', 'AM', '(92) 98765-4321', 'contato@pescadosdonorte.com'),
-('Peixaria Atlântico Ltda', '45678901000104', '00000-000', '321', 'Bloco 39', 'BA', '(71) 12345-6789', 'contato@peixariaatlantico.com');
+('Mar Pesca Ltda', '12345678000101', '00000-000', '123', 'Bloco 42', 'RJ', '(21) 98765-4321', 'contato@marpesca.com', md5(rand())),
+('Aqua Transportes Ltda', '23456789000102', '00000-000', '456', 'Galpão 61', 'SP', '(11) 12345-6789', 'contato@aqua.com', md5(rand())),
+('Pescados do Norte S/A', '34567890000103', '00000-000', '789', 'Armazem 12', 'AM', '(92) 98765-4321', 'contato@pescadosdonorte.com', md5(rand())),
+('Peixaria Atlântico Ltda', '45678901000104', '00000-000', '321', 'Bloco 39', 'BA', '(71) 12345-6789', 'contato@peixariaatlantico.com', md5(rand()));
 -- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Insert de Usuários nas empresas
+-- Insert de Usuários nas empresas 
 -- Empresa: Mar Pesca Ltda
 insert into Usuario (nome, email, telefone, senha, fkEmpresa) 
 values 
@@ -200,6 +201,17 @@ values
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Comandos:
+
+-- Automotizar geração de tokens:
+CREATE EVENT gerar_token 
+ON SCHEDULE EVERY 15 DAY 
+ENABLE
+DO
+    UPDATE Empresa SET token = MD5(RAND());
+    
+-- Mostrar evento funcionando:
+show events;
+
 -- Exibir tudo Empresa:
 select * from Empresa;
 
