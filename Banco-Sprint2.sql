@@ -22,14 +22,14 @@ create table Usuario
  senha varchar(30) unique, 
  fkEmpresa int,
 CONSTRAINT fkEmpresaUsuario FOREIGN KEY (fkEmpresa)
-REFERENCES empresa(idEmpresa)
+REFERENCES Empresa(idEmpresa)
 );
 
 create table Camara 
 ( idCamara int primary key auto_increment,
 fkEmpresa int,
 CONSTRAINT fkEmpresaCamara FOREIGN KEY (fkEmpresa)
-REFERENCES empresa(idEmpresa),  
+REFERENCES Empresa(idEmpresa),  
 qtdPescados int,
 Especie varchar(30),
 tipoCamara varchar(15),
@@ -40,19 +40,20 @@ create table Sensor
 ( idSensor int primary key auto_increment,
 fkCamara int,
 CONSTRAINT fkCamaraSensor FOREIGN KEY (fkCamara)
-REFERENCES camara(idCamara),
+REFERENCES Camara(idCamara),
 Modelo varchar(25),
 UltimaManutencao DATE
 );
 
 create table Dados
-( idDados int primary key auto_increment,
+( idDados int auto_increment,
 fkSensor int,
+CONSTRAINT pkSensorDados PRIMARY KEY (idDados, fkSensor),
 CONSTRAINT fkSensorDados FOREIGN KEY (fkSensor)
-REFERENCES sensor(idSensor),
+REFERENCES Sensor(idSensor),
 SensorTemp FLOAT,
 SensorUmid FLOAT,
-HoraColeta DATETIME
+HoraColeta timestamp default current_timestamp
 );
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para as empresas fictícias
@@ -202,7 +203,7 @@ values
 
 -- Comandos:
 
--- Automotizar geração de tokens:
+-- Automatizar geração de tokens:
 CREATE EVENT gerar_token 
 ON SCHEDULE EVERY 15 DAY 
 ENABLE
