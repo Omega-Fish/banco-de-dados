@@ -18,7 +18,8 @@ create table Usuario
  ( idUsuario int primary key auto_increment,
  nome varchar(20),
  email varchar(50) unique,
- telefone char(15), 
+ telefoneFixo char(10),
+ telefoneCelular char(15), 
  senha varchar(30) unique, 
  fkEmpresa int,
 CONSTRAINT fkEmpresaUsuario FOREIGN KEY (fkEmpresa)
@@ -66,32 +67,32 @@ values
 -- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Insert de Usuários nas empresas 
 -- Empresa: Mar Pesca Ltda
-insert into Usuario (nome, email, telefone, senha, fkEmpresa) 
+insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, fkEmpresa) 
 values 
-('Antônio Silva', 'antonio.silva@marpesca.com', '(21) 99876-5432', 'antonio123', 1),
-('Luana Oliveira', 'luana.oliveira@marpesca.com', '(21) 98765-4321', 'luana456', 1),
-('Rafael Santos', 'rafael.santos@marpesca.com', '(21) 98765-6789', 'rafael789', 1);
+('Antônio Silva', 'antonio.silva@marpesca.com', 'XXXX-XXXX', '(21) 99876-5432', 'antonio123', 1),
+('Luana Oliveira', 'luana.oliveira@marpesca.com', 'XXXX-XXXX', '(21) 98765-4321', 'luana456', 1),
+('Rafael Santos', 'rafael.santos@marpesca.com', 'XXXX-XXXX', '(21) 98765-6789', 'rafael789', 1);
 
 -- Empresa: Aqua Transportes Ltda
-insert into Usuario (nome, email, telefone, senha, fkEmpresa) 
+insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, fkEmpresa)
 values 
-('Pedro Lima', 'pedro.lima@aqua.com', '(11) 99876-5432', 'pedro123', 2),
-('Ana Souza', 'ana.souza@aqua.com', '(11) 98765-4321', 'ana456', 2),
-('Márcio Oliveira', 'marcio.oliveira@aqua.com', '(11) 98765-6789', 'marcio789', 2);
+('Pedro Lima', 'pedro.lima@aqua.com', 'XXXX-XXXX', '(11) 99876-5432', 'pedro123', 2),
+('Ana Souza', 'ana.souza@aqua.com', 'XXXX-XXXX', '(11) 98765-4321', 'ana456', 2),
+('Márcio Oliveira', 'marcio.oliveira@aqua.com', 'XXXX-XXXX', '(11) 98765-6789', 'marcio789', 2);
 
 -- Empresa: Pescados do Norte S/A
-insert into Usuario (nome, email, telefone, senha, fkEmpresa) 
+insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, fkEmpresa)
 values 
-('Carla Santos', 'carla.santos@pescadosdonorte.com', '(92) 99876-5432', 'carla123', 3),
-('Lucas Pereira', 'lucas.pereira@pescadosdonorte.com', '(92) 98765-4321', 'lucas456', 3),
-('Fernanda Lima', 'fernanda.lima@pescadosdonorte.com', '(92) 98765-6789', 'fernanda789', 3);
+('Carla Santos', 'carla.santos@pescadosdonorte.com', 'XXXX-XXXX', '(92) 99876-5432', 'carla123', 3),
+('Lucas Pereira', 'lucas.pereira@pescadosdonorte.com', 'XXXX-XXXX', '(92) 98765-4321', 'lucas456', 3),
+('Fernanda Lima', 'fernanda.lima@pescadosdonorte.com', 'XXXX-XXXX', '(92) 98765-6789', 'fernanda789', 3);
 
 -- Empresa: Peixaria Atlântico Ltda
-insert into Usuario (nome, email, telefone, senha, fkEmpresa) 
+insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, fkEmpresa) 
 values 
-('Gustavo Silva', 'gustavo.silva@peixariaatlantico.com', '(71) 99876-5432', 'gustavo123', 4),
-('Juliana Costa', 'juliana.costa@peixariaatlantico.com', '(71) 98765-4321', 'juliana456', 4),
-('Diego Oliveira', 'diego.oliveira@peixariaatlantico.com', '(71) 98765-6789', 'diego789', 4);
+('Gustavo Silva', 'gustavo.silva@peixariaatlantico.com', 'XXXX-XXXX', '(71) 99876-5432', 'gustavo123', 4),
+('Juliana Costa', 'juliana.costa@peixariaatlantico.com', 'XXXX-XXXX', '(71) 98765-4321', 'juliana456', 4),
+('Diego Oliveira', 'diego.oliveira@peixariaatlantico.com', 'XXXX-XXXX', '(71) 98765-6789', 'diego789', 4);
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para a tabela Camara
 -- Empresa: Mar Pesca Ltda
@@ -229,6 +230,6 @@ select * from Sensor;
 select * from Dados;
 
 -- Selecionar todas as empresas e seus respectivos usuários:
-select Empresa.nome as 'Nome da Empresa', Usuario.nome as 'Nome do Usuário', Usuario.email, Usuario.telefone
+select Empresa.nome as 'Nome da Empresa', Usuario.nome as 'Nome do Usuário', Usuario.email, Usuario.telefoneCelular, Usuario.telefoneFixo
 from Empresa 
 join Usuario on idEmpresa = fkEmpresa;
