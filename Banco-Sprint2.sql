@@ -53,7 +53,7 @@ CONSTRAINT fkSensorDados FOREIGN KEY (fkSensor)
 REFERENCES Sensor(idSensor),
 SensorTemp FLOAT,
 SensorUmid FLOAT,
-HoraColeta timestamp default current_timestamp
+HoraColeta DATETIME default current_timestamp
 );
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para as empresas fictícias
