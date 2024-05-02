@@ -3,15 +3,15 @@ use Sprint2;
 
 create table Empresa
 ( idEmpresa int primary key auto_increment,
-nome varchar(40),
-cnpj char(14) unique,
-cep char(9),
+Nome varchar(40),
+CNPJ char(14) unique,
+CEP char(9),
 numLogradouro char(4),
-complemento varchar(20),
-uf char(2),
-telefone char(15),
-email varchar(50),
-token varchar(32) unique
+Complemento varchar(20),
+UF char(2),
+Telefone char(11),
+Email varchar(50),
+Token varchar(32) unique
 );
 
 create table Usuario
@@ -19,11 +19,12 @@ create table Usuario
  fkEmpresa int,
 CONSTRAINT fkEmpresaUsuario FOREIGN KEY (fkEmpresa)
 REFERENCES Empresa(idEmpresa),
- nome varchar(20),
- email varchar(50) unique,
- telefoneFixo char(10),
- telefoneCelular char(15), 
- senha varchar(30) unique
+ Nome varchar(30),
+ Email varchar(50) unique,
+ CPF char(11) unique,
+ TelefoneFixo char(9),
+ TelefoneCelular char(11), 
+ Senha varchar(30) unique
 );
 
 create table Camara 
@@ -56,9 +57,8 @@ HoraColeta DATETIME default current_timestamp
 );
 
 create table Valor
-( idValor int auto_increment,
+( idValor int primary key auto_increment,
 fkSensor int,
-CONSTRAINT pkSensorDados PRIMARY KEY (idValor, fkSensor),
 CONSTRAINT fkSensorValor FOREIGN KEY (fkSensor)
 REFERENCES Sensor(idSensor),
 minTemp INT,
@@ -74,39 +74,39 @@ constraint chkmaxUmid check (maxUmid in ( 53))
 -- Inserts para as empresas fictícias
 insert into Empresa (nome, cnpj, cep, numLogradouro, complemento, uf, telefone, email, token) 
 values 
-('Mar Pesca Ltda', '12345678000101', '00000-000', '123', 'Bloco 42', 'RJ', '(21) 98765-4321', 'contato@marpesca.com', md5(rand())),
-('Aqua Transportes Ltda', '23456789000102', '00000-000', '456', 'Galpão 61', 'SP', '(11) 12345-6789', 'contato@aqua.com', md5(rand())),
-('Pescados do Norte S/A', '34567890000103', '00000-000', '789', 'Armazem 12', 'AM', '(92) 98765-4321', 'contato@pescadosdonorte.com', md5(rand())),
-('Peixaria Atlântico Ltda', '45678901000104', '00000-000', '321', 'Bloco 39', 'BA', '(71) 12345-6789', 'contato@peixariaatlantico.com', md5(rand()));
+('Mar Pesca Ltda', '12345678000101', '00000000', '123', 'Bloco 42', 'RJ', '21987654321', 'contato@marpesca.com', md5(rand())),
+('Aqua Transportes Ltda', '23456789000102', '00000000', '456', 'Galpão 61', 'SP', '11123456789', 'contato@aqua.com', md5(rand())),
+('Pescados do Norte S/A', '34567890000103', '00000000', '789', 'Armazem 12', 'AM', '92987654321', 'contato@pescadosdonorte.com', md5(rand())),
+('Peixaria Atlântico Ltda', '45678901000104', '00000000', '321', 'Bloco 39', 'BA', '71123456789', 'contato@peixariaatlantico.com', md5(rand()));
 -- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Insert de Usuários nas empresas 
 -- Empresa: Mar Pesca Ltda
-insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, fkEmpresa) 
+insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, cpf, fkEmpresa) 
 values 
-('Antônio Silva', 'antonio.silva@marpesca.com', 'XXXX-XXXX', '(21) 99876-5432', 'antonio123', 1),
-('Luana Oliveira', 'luana.oliveira@marpesca.com', 'XXXX-XXXX', '(21) 98765-4321', 'luana456', 1),
-('Rafael Santos', 'rafael.santos@marpesca.com', 'XXXX-XXXX', '(21) 98765-6789', 'rafael789', 1);
+('Antônio Silva', 'antonio.silva@marpesca.com', '000000000', '21998765432', '#antonio123', '12345678910', 1),
+('Luana Oliveira', 'luana.oliveira@marpesca.com', '000000000', '21987654321', '&luana456', '12345678911', 1),
+('Rafael Santos', 'rafael.santos@marpesca.com', '000000000', '21987656789', '@rafael789', '12345678912', 1);
 
 -- Empresa: Aqua Transportes Ltda
-insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, fkEmpresa)
+insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, cpf, fkEmpresa)
 values 
-('Pedro Lima', 'pedro.lima@aqua.com', 'XXXX-XXXX', '(11) 99876-5432', 'pedro123', 2),
-('Ana Souza', 'ana.souza@aqua.com', 'XXXX-XXXX', '(11) 98765-4321', 'ana456', 2),
-('Márcio Oliveira', 'marcio.oliveira@aqua.com', 'XXXX-XXXX', '(11) 98765-6789', 'marcio789', 2);
+('Pedro Lima', 'pedro.lima@aqua.com', '000000000', '11998765432', '&pedro123', '12345678913',  2),
+('Ana Souza', 'ana.souza@aqua.com', '000000000', '11987654321', '$ana456', '12345678914', 2),
+('Márcio Oliveira', 'marcio.oliveira@aqua.com', '000000000', '11987656789', '#marcio789', '12345678915', 2);
 
 -- Empresa: Pescados do Norte S/A
-insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, fkEmpresa)
+insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, cpf, fkEmpresa)
 values 
-('Carla Santos', 'carla.santos@pescadosdonorte.com', 'XXXX-XXXX', '(92) 99876-5432', 'carla123', 3),
-('Lucas Pereira', 'lucas.pereira@pescadosdonorte.com', 'XXXX-XXXX', '(92) 98765-4321', 'lucas456', 3),
-('Fernanda Lima', 'fernanda.lima@pescadosdonorte.com', 'XXXX-XXXX', '(92) 98765-6789', 'fernanda789', 3);
+('Carla Santos', 'carla.santos@pescadosdonorte.com', '000000000', '92998765432', '&carla123', '12345678916', 3),
+('Lucas Pereira', 'lucas.pereira@pescadosdonorte.com', '000000000', '92987654321', '%lucas456', '12345678917', 3),
+('Fernanda Lima', 'fernanda.lima@pescadosdonorte.com', '000000000', '92987656789', '#fernanda789', '12345678918', 3);
 
 -- Empresa: Peixaria Atlântico Ltda
-insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, fkEmpresa) 
+insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, cpf, fkEmpresa) 
 values 
-('Gustavo Silva', 'gustavo.silva@peixariaatlantico.com', 'XXXX-XXXX', '(71) 99876-5432', 'gustavo123', 4),
-('Juliana Costa', 'juliana.costa@peixariaatlantico.com', 'XXXX-XXXX', '(71) 98765-4321', 'juliana456', 4),
-('Diego Oliveira', 'diego.oliveira@peixariaatlantico.com', 'XXXX-XXXX', '(71) 98765-6789', 'diego789', 4);
+('Gustavo Silva', 'gustavo.silva@peixariaatlantico.com', '000000000', '71998765432', '@gustavo123', '12345678919', 4),
+('Juliana Costa', 'juliana.costa@peixariaatlantico.com', '000000000', '71987654321', '%juliana456', '12345678920', 4),
+('Diego Oliveira', 'diego.oliveira@peixariaatlantico.com', '000000000', '71987656789', '&diego789', '12345678921', 4);
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para a tabela Camara
 -- Empresa: Mar Pesca Ltda
