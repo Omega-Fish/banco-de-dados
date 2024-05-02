@@ -16,14 +16,14 @@ token varchar(32) unique
 
 create table Usuario
  ( idUsuario int primary key auto_increment,
+ fkEmpresa int,
+CONSTRAINT fkEmpresaUsuario FOREIGN KEY (fkEmpresa)
+REFERENCES Empresa(idEmpresa),
  nome varchar(20),
  email varchar(50) unique,
  telefoneFixo char(10),
  telefoneCelular char(15), 
- senha varchar(30) unique, 
- fkEmpresa int,
-CONSTRAINT fkEmpresaUsuario FOREIGN KEY (fkEmpresa)
-REFERENCES Empresa(idEmpresa)
+ senha varchar(30) unique
 );
 
 create table Camara 
@@ -32,9 +32,7 @@ fkEmpresa int,
 CONSTRAINT fkEmpresaCamara FOREIGN KEY (fkEmpresa)
 REFERENCES Empresa(idEmpresa),  
 qtdPescados int,
-Especie varchar(30),
-tipoCamara varchar(15),
-constraint chkTipoCamara check (tipoCamara in ('fresco','congelado'))
+Especie varchar(30)
 );
 
 create table Sensor
@@ -64,13 +62,13 @@ CONSTRAINT pkSensorDados PRIMARY KEY (idValor, fkSensor),
 CONSTRAINT fkSensorValor FOREIGN KEY (fkSensor)
 REFERENCES Sensor(idSensor),
 minTemp INT,
-constraint chkminTemp check (minTemp in ( 0, -30)),
+constraint chkminTemp check (minTemp in ( 0)),
 maxTemp INT,
-constraint chkmaxTemp check (maxTemp in ( 2, -18)),
+constraint chkmaxTemp check (maxTemp in ( 2)),
 minUmid INT,
-constraint chkminUmid check (minUmid in ( 52, 80)),
+constraint chkminUmid check (minUmid in ( 52)),
 maxUmid INT,
-constraint chkmaxUmid check (maxUmid in ( 53, 85))
+constraint chkmaxUmid check (maxUmid in ( 53))
 );
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para as empresas fictícias
@@ -112,53 +110,45 @@ values
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para a tabela Camara
 -- Empresa: Mar Pesca Ltda
-insert into Camara (fkEmpresa, qtdPescados, Especie, tipoCamara) 
+insert into Camara (fkEmpresa, qtdPescados, Especie) 
 values 
-(1, 800, 'Tilápia', 'fresco'),
-(1, 600, 'Salmão', 'congelado');
+(1, 800, 'Tilápia');
 
 -- Empresa: Aqua Transportes Ltda
-insert into Camara (fkEmpresa, qtdPescados, Especie, tipoCamara) 
+insert into Camara (fkEmpresa, qtdPescados, Especie) 
 values 
-(2, 700, 'Tambaqui', 'fresco'),
-(2, 500, 'Robalo', 'congelado');
+(2, 700, 'Tambaqui');
 
 -- Empresa: Pescados do Norte S/A
-insert into Camara (fkEmpresa, qtdPescados, Especie, tipoCamara) 
+insert into Camara (fkEmpresa, qtdPescados, Especie) 
 values 
-(3, 900, 'Pintado', 'fresco'),
-(3, 400, 'Linguado', 'congelado');
+(3, 900, 'Pintado');
 
 -- Empresa: Peixaria Atlântico Ltda
-insert into Camara (fkEmpresa, qtdPescados, Especie, tipoCamara) 
+insert into Camara (fkEmpresa, qtdPescados, Especie) 
 values 
-(4, 1000, 'Dourado', 'fresco'),
-(4, 300, 'Pescada', 'congelado');
+(4, 1000, 'Dourado');
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para a tabela Sensor
 -- Empresa: Mar Pesca Ltda
 insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
 values 
-(1, 'DHT11 Arduino Uno', '2024-03-20'),
-(2, 'DHT11 Arduino Uno', '2024-03-20');
+(1, 'DHT11 Arduino Uno', '2024-03-20');
 
 -- Empresa: Aqua Transportes Ltda
 insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
 values 
-(3, 'DHT11 Arduino Uno', '2024-02-15'),
-(4, 'DHT11 Arduino Uno', '2024-02-15');
+(2, 'DHT11 Arduino Uno', '2024-02-15');
 
 -- Empresa: Pescados do Norte S/A
 insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
 values 
-(5, 'DHT11 Arduino Uno', '2024-01-10'),
-(6, 'DHT11 Arduino Uno', '2024-01-10');
+(3, 'DHT11 Arduino Uno', '2024-01-10');
 
 -- Empresa: Peixaria Atlântico Ltda
 insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
 values 
-(7, 'DHT11 Arduino Uno', '2024-04-05'),
-(8, 'DHT11 Arduino Uno', '2024-04-05');
+(4, 'DHT11 Arduino Uno', '2024-04-05');
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para a tabela Dados
 -- Empresa: Mar Pesca Ltda
@@ -168,65 +158,40 @@ values
 (1, 0.6, 52, '2024-04-01 08:30:00'),
 (1, 1.5, 52, '2024-04-01 09:00:00'),
 (1, 0.4, 53, '2024-04-01 09:30:00'),
-(1, 0.9, 53, '2024-04-01 10:00:00'),
-(2, -18.5, 81, '2024-04-01 08:00:00'), -- Congelado
-(2, -18.2, 82, '2024-04-01 09:00:00'),
-(2, -18.8, 80, '2024-04-01 10:00:00'),
-(2, -19.3, 83, '2024-04-01 11:00:00'),
-(2, -18.5, 84, '2024-04-01 12:00:00');
+(1, 0.9, 53, '2024-04-01 10:00:00');
 
 -- Empresa: Aqua Transportes Ltda
+insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
+values 
+(2, 0.2, 52, '2024-04-01 08:00:00'), -- Fresco
+(2, 0.6, 52, '2024-04-01 08:30:00'),
+(2, 1.5, 52, '2024-04-01 09:00:00'),
+(2, 0.4, 53, '2024-04-01 09:30:00'),
+(2, 0.9, 53, '2024-04-01 10:00:00');
+-- Empresa: Pescados do Norte S/A
 insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
 values 
 (3, 0.2, 52, '2024-04-01 08:00:00'), -- Fresco
 (3, 0.6, 52, '2024-04-01 08:30:00'),
 (3, 1.5, 52, '2024-04-01 09:00:00'),
 (3, 0.4, 53, '2024-04-01 09:30:00'),
-(3, 0.9, 53, '2024-04-01 10:00:00'),
-(4, -18.5, 81, '2024-04-01 08:00:00'), -- Congelado
-(4, -18.2, 82, '2024-04-01 09:00:00'),
-(4, -18.8, 80, '2024-04-01 10:00:00'),
-(4, -19.3, 83, '2024-04-01 11:00:00'),
-(4, -18.5, 84, '2024-04-01 12:00:00');
-
--- Empresa: Pescados do Norte S/A
-insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
-values 
-(5, 0.2, 52, '2024-04-01 08:00:00'), -- Fresco
-(5, 0.6, 52, '2024-04-01 08:30:00'),
-(5, 1.5, 52, '2024-04-01 09:00:00'),
-(5, 0.4, 53, '2024-04-01 09:30:00'),
-(5, 0.9, 53, '2024-04-01 10:00:00'),
-(6, -18.5, 81, '2024-04-01 08:00:00'), -- Congelado
-(6, -18.2, 82, '2024-04-01 09:00:00'),
-(6, -18.8, 80, '2024-04-01 10:00:00'),
-(6, -19.3, 83, '2024-04-01 11:00:00'),
-(6, -18.5, 84, '2024-04-01 12:00:00');
+(3, 0.9, 53, '2024-04-01 10:00:00');
 
 -- Empresa: Peixaria Atlântico Ltda
 insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
 values 
-(7, 0.2, 52, '2024-04-01 08:00:00'), -- Fresco
-(7, 0.6, 52, '2024-04-01 08:30:00'),
-(7, 1.5, 52, '2024-04-01 09:00:00'),
-(7, 0.4, 53, '2024-04-01 09:30:00'),
-(7, 0.9, 53, '2024-04-01 10:00:00'),
-(8, -18.5, 81, '2024-04-01 08:00:00'), -- Congelado
-(8, -18.2, 82, '2024-04-01 09:00:00'),
-(8, -18.8, 80, '2024-04-01 10:00:00'),
-(8, -19.3, 83, '2024-04-01 11:00:00'),
-(8, -18.5, 84, '2024-04-01 12:00:00');
+(4, 0.2, 52, '2024-04-01 08:00:00'), -- Fresco
+(4, 0.6, 52, '2024-04-01 08:30:00'),
+(4, 1.5, 52, '2024-04-01 09:00:00'),
+(4, 0.4, 53, '2024-04-01 09:30:00'),
+(4, 0.9, 53, '2024-04-01 10:00:00');
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Valores mínimos e máximos: Temperatura e Umidade - Fresco e Congelado
 insert into Valor (fkSensor, minTemp, maxTemp, minUmid, maxUmid) values
 (1, 0, 2, 52, 53),
-(2, -30, -18, 80, 85),
+(2, 0, 2, 52, 53),
 (3, 0, 2, 52, 53),
-(4, -30, -18, 80, 85),
-(5, 0, 2, 52, 53),
-(6, -30, -18, 80, 85),
-(7, 0, 2, 52, 53),
-(8, -30, -18, 80, 85);
+(4, 0, 2, 52, 53);
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Comandos:
