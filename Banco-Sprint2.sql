@@ -70,6 +70,17 @@ constraint chkminUmid check (minUmid in ( 52)),
 maxUmid INT,
 constraint chkmaxUmid check (maxUmid in ( 53))
 );
+
+create table Alertas
+( idAlertas int primary key auto_increment,
+fkDados int,
+CONSTRAINT fkDadosAlertas FOREIGN KEY (fkDados)
+REFERENCES Dados(idDados),
+fkSensor int,
+CONSTRAINT fkSensorAlertas FOREIGN KEY (fkSensor)
+REFERENCES Sensor(idSensor),
+HoraAlerta DATETIME default current_timestamp
+);
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para as empresas fictícias
 insert into Empresa (nome, cnpj, cep, numLogradouro, complemento, uf, telefone, email, token) 
