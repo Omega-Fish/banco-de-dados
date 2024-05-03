@@ -27,10 +27,10 @@ REFERENCES Empresa(idEmpresa),
  Senha varchar(30) unique
 );
 
-create table Camara 
-( idCamara int primary key auto_increment,
+create table CamaraCaminhao 
+( idCamaraCaminhao int primary key auto_increment,
 fkEmpresa int,
-CONSTRAINT fkEmpresaCamara FOREIGN KEY (fkEmpresa)
+CONSTRAINT fkEmpresaCamaraCaminhao FOREIGN KEY (fkEmpresa)
 REFERENCES Empresa(idEmpresa),  
 qtdPescados int,
 Especie varchar(30)
@@ -38,9 +38,9 @@ Especie varchar(30)
 
 create table Sensor
 ( idSensor int primary key auto_increment,
-fkCamara int,
-CONSTRAINT fkCamaraSensor FOREIGN KEY (fkCamara)
-REFERENCES Camara(idCamara),
+fkCamaraCaminhao int,
+CONSTRAINT fkCamaraCaminhaoSensor FOREIGN KEY (fkCamaraCaminhao)
+REFERENCES CamaraCaminhao(idCamaraCaminhao),
 Modelo varchar(25),
 UltimaManutencao DATE
 );
@@ -56,10 +56,10 @@ SensorUmid FLOAT,
 HoraColeta DATETIME default current_timestamp
 );
 
-create table Valor
+create table Intervalo
 ( idValor int primary key auto_increment,
 fkSensor int,
-CONSTRAINT fkSensorValor FOREIGN KEY (fkSensor)
+CONSTRAINT fkSensorIntervalo FOREIGN KEY (fkSensor)
 REFERENCES Sensor(idSensor),
 minTemp INT,
 constraint chkminTemp check (minTemp in ( 0)),
@@ -119,45 +119,45 @@ values
 ('Juliana Costa', 'juliana.costa@peixariaatlantico.com', '000000000', '71987654321', '%juliana456', '12345678920', 4),
 ('Diego Oliveira', 'diego.oliveira@peixariaatlantico.com', '000000000', '71987656789', '&diego789', '12345678921', 4);
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Inserts para a tabela Camara
+-- Inserts para a tabela CamaraCaminhao
 -- Empresa: Mar Pesca Ltda
-insert into Camara (fkEmpresa, qtdPescados, Especie) 
+insert into CamaraCaminhao (fkEmpresa, qtdPescados, Especie) 
 values 
 (1, 800, 'Tilápia');
 
 -- Empresa: Aqua Transportes Ltda
-insert into Camara (fkEmpresa, qtdPescados, Especie) 
+insert into CamaraCaminhao (fkEmpresa, qtdPescados, Especie) 
 values 
 (2, 700, 'Tambaqui');
 
 -- Empresa: Pescados do Norte S/A
-insert into Camara (fkEmpresa, qtdPescados, Especie) 
+insert into CamaraCaminhao (fkEmpresa, qtdPescados, Especie) 
 values 
 (3, 900, 'Pintado');
 
 -- Empresa: Peixaria Atlântico Ltda
-insert into Camara (fkEmpresa, qtdPescados, Especie) 
+insert into CamaraCaminhao (fkEmpresa, qtdPescados, Especie) 
 values 
 (4, 1000, 'Dourado');
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para a tabela Sensor
 -- Empresa: Mar Pesca Ltda
-insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
+insert into Sensor (fkCamaraCaminhao, Modelo, UltimaManutencao) 
 values 
 (1, 'DHT11 Arduino Uno', '2024-03-20');
 
 -- Empresa: Aqua Transportes Ltda
-insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
+insert into Sensor (fkCamaraCaminhao, Modelo, UltimaManutencao) 
 values 
 (2, 'DHT11 Arduino Uno', '2024-02-15');
 
 -- Empresa: Pescados do Norte S/A
-insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
+insert into Sensor (fkCamaraCaminhao, Modelo, UltimaManutencao) 
 values 
 (3, 'DHT11 Arduino Uno', '2024-01-10');
 
 -- Empresa: Peixaria Atlântico Ltda
-insert into Sensor (fkCamara, Modelo, UltimaManutencao) 
+insert into Sensor (fkCamaraCaminhao, Modelo, UltimaManutencao) 
 values 
 (4, 'DHT11 Arduino Uno', '2024-04-05');
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -169,7 +169,8 @@ values
 (1, 0.6, 52, '2024-04-01 08:30:00'),
 (1, 1.5, 52, '2024-04-01 09:00:00'),
 (1, 0.4, 53, '2024-04-01 09:30:00'),
-(1, 0.9, 53, '2024-04-01 10:00:00');
+(1, 0.9, 53, '2024-04-01 10:00:00'),
+(1, 2.5, 53, '2024-04-01 10:30:00');
 
 -- Empresa: Aqua Transportes Ltda
 insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
@@ -178,7 +179,8 @@ values
 (2, 0.6, 52, '2024-04-01 08:30:00'),
 (2, 1.5, 52, '2024-04-01 09:00:00'),
 (2, 0.4, 53, '2024-04-01 09:30:00'),
-(2, 0.9, 53, '2024-04-01 10:00:00');
+(2, 0.9, 53, '2024-04-01 10:00:00'),
+(2, 2.5, 53, '2024-04-01 10:30:00');
 -- Empresa: Pescados do Norte S/A
 insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
 values 
@@ -186,7 +188,8 @@ values
 (3, 0.6, 52, '2024-04-01 08:30:00'),
 (3, 1.5, 52, '2024-04-01 09:00:00'),
 (3, 0.4, 53, '2024-04-01 09:30:00'),
-(3, 0.9, 53, '2024-04-01 10:00:00');
+(3, 0.9, 53, '2024-04-01 10:00:00'),
+(3, 2.5, 53, '2024-04-01 10:30:00');
 
 -- Empresa: Peixaria Atlântico Ltda
 insert into Dados (fkSensor, SensorTemp, SensorUmid, HoraColeta) 
@@ -195,16 +198,23 @@ values
 (4, 0.6, 52, '2024-04-01 08:30:00'),
 (4, 1.5, 52, '2024-04-01 09:00:00'),
 (4, 0.4, 53, '2024-04-01 09:30:00'),
-(4, 0.9, 53, '2024-04-01 10:00:00');
+(4, 0.9, 53, '2024-04-01 10:00:00'),
+(4, 2.5, 53, '2024-04-01 10:30:00');
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Valores mínimos e máximos: Temperatura e Umidade - Fresco e Congelado
-insert into Valor (fkSensor, minTemp, maxTemp, minUmid, maxUmid) values
+insert into Intervalo (fkSensor, minTemp, maxTemp, minUmid, maxUmid) values
 (1, 0, 2, 52, 53),
 (2, 0, 2, 52, 53),
 (3, 0, 2, 52, 53),
 (4, 0, 2, 52, 53);
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-- Alertas inseridos no banco
+insert into Alertas (fkDados, fkSensor, HoraAlerta) values
+(6, 1, '2024-04-01 10:30:00' ),
+(6, 2, '2024-04-01 10:30:00' ),
+(6, 3, '2024-04-01 10:30:00' ),
+(6, 4, '2024-04-01 10:30:00' );
+-- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Comandos:
 
 -- Exibir tudo Empresa:
@@ -213,8 +223,8 @@ select * from Empresa;
 -- Exibir tudo Usuário:
 select * from Usuario;
 
--- Exibir tudo Câmara:
-select * from Camara;
+-- Exibir tudo CâmaraCaminhão:
+select * from CamaraCaminhao;
 
 -- Exibir tudo Sensor:
 select * from Sensor;
@@ -222,8 +232,11 @@ select * from Sensor;
 -- Exibir tudo Dados:
 select * from Dados;
 
--- Exibir tudo Valor:
+-- Exibir tudo Intervalo:
 select * from Valor;
+
+-- Exibir tudo Alertas:
+select * from Alertas;
 
 -- Selecionar todas as empresas e seus respectivos usuários:
 select Empresa.nome as 'Nome da Empresa', Usuario.nome as 'Nome do Usuário', Usuario.email, Usuario.telefoneCelular, Usuario.telefoneFixo
