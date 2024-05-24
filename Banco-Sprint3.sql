@@ -1,5 +1,5 @@
-create database Sprint2;
-use Sprint2;
+create database Sprint3;
+use Sprint3;
 
 create table Empresa
 ( idEmpresa int primary key auto_increment,
@@ -217,6 +217,21 @@ insert into Alertas (fkDados, fkSensor, HoraAlerta) values
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Comandos:
 
+-- Seleção de Celsius para Farenheit:
+select 
+    SensorTemp,
+    round((SensorTemp * 9 / 5) + 32) as MetricaFahrenheit
+from 
+    Dados;
+
+
+-- Automatizar geração de tokens:
+CREATE EVENT gerar_token 
+ON SCHEDULE EVERY 15 DAY 
+ENABLE
+DO
+    UPDATE Empresa SET token = MD5(RAND());
+    
 -- Exibir tudo Empresa:
 select * from Empresa;
 
