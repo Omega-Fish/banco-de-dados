@@ -88,7 +88,8 @@ values
 ('Mar Pesca Ltda', '12345678000101', '00000000', '123', 'Bloco 42', 'RJ', '21987654321', 'contato@marpesca.com', md5(rand())),
 ('Aqua Transportes Ltda', '23456789000102', '00000000', '456', 'Galpão 61', 'SP', '11123456789', 'contato@aqua.com', md5(rand())),
 ('Pescados do Norte S/A', '34567890000103', '00000000', '789', 'Armazem 12', 'AM', '92987654321', 'contato@pescadosdonorte.com', md5(rand())),
-('Peixaria Atlântico Ltda', '45678901000104', '00000000', '321', 'Bloco 39', 'BA', '71123456789', 'contato@peixariaatlantico.com', md5(rand()));
+('Peixaria Atlântico Ltda', '45678901000104', '00000000', '321', 'Bloco 39', 'BA', '71123456789', 'contato@peixariaatlantico.com', md5(rand())),
+('OmegaFish', '68578254000125', '01414001', '451', 'Bloco 10', 'SP', '1135075226', 'contato@omegafish.com', 'b3752cdb2e64fc3232ea60b4e8f11975');
 -- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Insert de Usuários nas empresas 
 -- Empresa: Mar Pesca Ltda
@@ -118,6 +119,11 @@ values
 ('Gustavo Silva', 'gustavo.silva@peixariaatlantico.com', '000000000', '71998765432', '@gustavo123', '12345678919', 4),
 ('Juliana Costa', 'juliana.costa@peixariaatlantico.com', '000000000', '71987654321', '%juliana456', '12345678920', 4),
 ('Diego Oliveira', 'diego.oliveira@peixariaatlantico.com', '000000000', '71987656789', '&diego789', '12345678921', 4);
+
+-- OmegaFish
+insert into Usuario (nome, email, telefoneFixo,telefoneCelular, senha, cpf, fkEmpresa) 
+values 
+('Suporte', 'suporte@omegafish.com', '000000000', '71998765432', '@Suporte10', '12345678987', 5);
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserts para a tabela CamaraCaminhao
 -- Empresa: Mar Pesca Ltda
